@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StudyMate V3</title>
+<style>
+:root{--bg:#f5f7fb;--surface:#fff;--surface2:#eef1ff;--text:#182033;--muted:#70798d;--primary:#5d62e8;--primary2:#484dc9;--border:#e3e7ef;--good:#20a46b;--danger:#df4d63;--shadow:0 12px 35px rgba(30,40,70,.08)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
+body.dark{--bg:#10131c;--surface:#181d29;--surface2:#252b42;--text:#f4f6fb;--muted:#a7afc0;--border:#303748;--shadow:0 12px 35px rgba(0,0,0,.25)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.app{min-height:100vh;display:flex}
+.sidebar{width:235px;background:var(--surface);border-right:1px solid var(--border);padding:25px 15px;position:fixed;inset:0 auto 0 0}
+.brand{font-size:25px;font-weight:900;padding:5px 12px 25px}.brand span{color:var(--primary)}
+.navbtn{width:100%;border:0;background:transparent;color:var(--muted);padding:13px 14px;text-align:left;border-radius:12px;margin:3px 0;font-weight:700}.navbtn.active,.navbtn:hover{background:var(--surface2);color:var(--primary)}
+.sidebar-bottom{position:absolute;bottom:20px;left:15px;right:15px}
+.content{margin-left:235px;width:calc(100% - 235px);max-width:1200px;padding:28px 30px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.title h1{margin:0;font-size:28px}.title p{margin:5px 0;color:var(--muted)}
+.iconbtn{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:12px;padding:10px 12px}
+.hero{background:linear-gradient(135deg,#5d62e8,#8062df);color:white;border-radius:22px;padding:26px;box-shadow:var(--shadow);margin-bottom:18px}.hero h2{margin:0 0 7px;font-size:25px}.hero p{margin:0;opacity:.9}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}.stat,.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:var(--shadow)}.stat small{color:var(--muted)}.stat strong{display:block;font-size:26px;margin-top:7px}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.card h3{margin:0 0 15px}.progress{height:11px;background:var(--surface2);border-radius:20px;overflow:hidden}.bar{height:100%;width:0;background:var(--primary);transition:.3s}
+section{display:none}section.active{display:block}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:11px;background:var(--surface);color:var(--text);outline:none}textarea{min-height:100px;resize:vertical}
+.primary{border:0;background:var(--primary);color:#fff;padding:11px 15px;border-radius:11px;font-weight:800}.primary:hover{background:var(--primary2)}.ghost{border:0;background:var(--surface2);color:var(--primary);padding:10px 13px;border-radius:10px;font-weight:700}.danger{border:0;background:transparent;color:var(--danger);font-weight:700}
+.item{display:flex;gap:11px;align-items:center;padding:13px 0;border-bottom:1px solid var(--border)}.item:last-child{border-bottom:0}.itemmain{flex:1}.itemmain b{display:block;margin-bottom:4px}.muted{color:var(--muted);font-size:13px}.badge{display:inline-block;padding:4px 8px;border-radius:20px;background:var(--surface2);color:var(--primary);font-size:11px;font-weight:800}.done{text-decoration:line-through;color:var(--muted)}
+.empty{text-align:center;color:var(--muted);padding:25px 5px}.count{font-size:30px;font-weight:900;color:var(--primary);margin:8px 0}.note{padding:14px;border:1px solid var(--border);border-radius:13px;margin:9px 0;background:var(--surface2)}
+.timer{text-align:center;padding:15px}.timerclock{font-size:65px;font-weight:900;letter-spacing:2px;margin:10px}.timer button{margin:3px}.profile{display:flex;gap:15px;align-items:center}.avatar{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:var(--surface2);font-size:28px}
+@media(max-width:800px){.sidebar{width:70px;padding:18px 8px}.brand{font-size:0;text-align:center}.brand:first-letter{font-size:25px}.navbtn{font-size:0;text-align:center}.navbtn:first-letter{font-size:20px}.sidebar-bottom{left:8px;right:8px}.content{margin-left:70px;width:calc(100% - 70px);padding:20px 15px}.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.title h1{font-size:23px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+<div class="brand">Study<span>Mate</span> 📚</div>
+<button class="navbtn active" data-tab="dashboard">🏠 Dashboard</button>
+<button class="navbtn" data-tab="homework">📝 Homework</button>
+<button class="navbtn" data-tab="planner">📅 Planner</button>
+<button class="navbtn" data-tab="exams">⏳ Exams</button>
+<button class="navbtn" data-tab="notes">📚 Notes</button>
+<button class="navbtn" data-tab="timer">⏱️ Timer</button>
+<button class="navbtn" data-tab="profile">👤 Profile</button>
+<div class="sidebar-bottom"><button class="navbtn" id="themeBtn">🌙 Dark mode</button></div>
+</aside>
+<main class="content">
+<div class="topbar"><div class="title"><h1 id="pageTitle">Dashboard</h1><p id="today"></p></div><button class="iconbtn" onclick="showTab('profile')">⚙️</button></div>
+
+<section id="dashboard" class="active">
+<div class="hero"><h2 id="hello">Hello, Student! 👋</h2><p>Plan your work, track your progress and study smarter.</p></div>
+<div class="stats"><div class="stat"><small>Total homework</small><strong id="sHW">0</strong></div><div class="stat"><small>Completed</small><strong id="sDone">0</strong></div><div class="stat"><small>Upcoming exams</small><strong id="sExam">0</strong></div><div class="stat"><small>Saved notes</small><strong id="sNotes">0</strong></div></div>
+<div class="grid"><div class="card"><h3>📊 Study progress</h3><div class="muted" id="pct">0% completed</div><br><div class="progress"><div class="bar" id="bar"></div></div><br><button class="ghost" onclick="showTab('homework')">Manage homework →</button></div>
+<div class="card"><h3>⚡ Quick actions</h3><div class="formgrid"><button class="primary" onclick="showTab('homework')">+ Homework</button><button class="ghost" onclick="showTab('planner')">+ Study plan</button><button class="ghost" onclick="showTab('exams')">+ Exam</button><button class="ghost" onclick="showTab('notes')">+ Note</button></div></div></div>
+</section>
+
+<section id="homework"><div class="card"><h3>📝 Homework Tracker</h3><div class="formgrid"><input id="hwTitle" placeholder="Homework title"><select id="hwSubject"><option>Science</option><option>Maths</option><option>English</option><option>Hindi</option><option>SST</option><option>Computer</option><option>Other</option><option></option></select><input id="hwDue" type="date"><button class="primary" onclick="addHW()">Add homework</button></div><div id="hwList"></div></div></section>
+
+<section id="planner"><div class="card"><h3>📅 Study Planner</h3><div class="formgrid"><input id="plTopic" placeholder="Subject / topic"><input id="plDate" type="date"><input id="plTime" type="time"><input id="plMin" type="number" min="5" placeholder="Minutes"></div><button class="primary" onclick="addPlan()">Add session</button><div id="planList"></div></div></section>
+
+<section id="exams"><div class="card"><h3>⏳ Exam Countdown</h3><div class="formgrid"><input id="exName" placeholder="Exam name"><input id="exDate" type="date"></div><button class="primary" onclick="addExam()">Add exam</button><div id="examList"></div></div></section>
+
+<section id="notes"><div class="card"><h3>📚 Notes</h3><div class="formgrid"><input id="noTitle" placeholder="Note title"><select id="noSubject"><option>Science</option><option>Maths</option><option>English</option><option>Hindi</option><option>SST</option><option>Computer</option></select></div><textarea id="noText" placeholder="Write your note..."></textarea><br><br><button class="primary" onclick="addNote()">Save note</button><div id="noteList"></div></div></section>
+
+<section id="timer"><div class="card timer"><h3>⏱️ Focus Timer</h3><div class="muted">Pomodoro: 25 minutes of focused study</div><div class="timerclock" id="clock">25:00</div><button class="primary" onclick="startTimer()">Start</button><button class="ghost" onclick="pauseTimer()">Pause</button><button class="ghost" onclick="resetTimer()">Reset</button></div></section>
+
+<section id="profile"><div class="card"><h3>👤 Student Profile</h3><div class="profile"><div class="avatar">🎓</div><div><b id="profileName">Student</b><div class="muted">StudyMate user</div></div></div><br><input id="nameInput" placeholder="Enter your name"><br><br><button class="primary" onclick="saveName()">Save profile</button><hr style="border:0;border-top:1px solid var(--border);margin:20px 0"><button class="danger" onclick="clearData()">Clear all app data</button></div></section>
+</main></div>
+
+<script>
+const load=k=>JSON.parse(localStorage.getItem(k)||'[]'), save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+let hw=load('v3hw'), plans=load('v3plans'), exams=load('v3exams'), notes=load('v3notes'), name=localStorage.getItem('v3name')||'Student';
+let timerSec=1500,timerInt=null;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function showTab(id){document.querySelectorAll('section').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('.navbtn[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));document.getElementById('pageTitle').textContent=id[0].toUpperCase()+id.slice(1);render()}
+document.querySelectorAll('.navbtn[data-tab]').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+function addHW(){let t=hwTitle.value.trim();if(!t)return alert('Enter homework title.');hw.push({id:Date.now(),t,s:hwSubject.value,d:hwDue.value,done:false});save('v3hw',hw);hwTitle.value='';render()}
+function toggleHW(id){let x=hw.find(a=>a.id===id);x.done=!x.done;save('v3hw',hw);render()}
+function delHW(id){hw=hw.filter(a=>a.id!==id);save('v3hw',hw);render()}
+function addPlan(){let t=plTopic.value.trim();if(!t)return alert('Enter a topic.');plans.push({id:Date.now(),t,d:plDate.value,time:plTime.value,m:plMin.value});save('v3plans',plans);plTopic.value='';plMin.value='';render()}
+function delPlan(id){plans=plans.filter(a=>a.id!==id);save('v3plans',plans);render()}
+function addExam(){let n=exName.value.trim();if(!n||!exDate.value)return alert('Enter exam name and date.');exams.push({id:Date.now(),n,d:exDate.value});save('v3exams',exams);exName.value='';render()}
+function delExam(id){exams=exams.filter(a=>a.id!==id);save('v3exams',exams);render()}
+function addNote(){let t=noTitle.value.trim(),x=noText.value.trim();if(!t||!x)return alert('Enter a title and note.');notes.push({id:Date.now(),t,s:noSubject.value,x});save('v3notes',notes);noTitle.value='';noText.value='';render()}
+function delNote(id){notes=notes.filter(a=>a.id!==id);save('v3notes',notes);render()}
+function days(d){let a=new Date();a.setHours(0,0,0,0);return Math.ceil((new Date(d+'T00:00:00')-a)/86400000)}
+function render(){
+sHW.textContent=hw.length;sDone.textContent=hw.filter(x=>x.done).length;sExam.textContent=exams.length;sNotes.textContent=notes.length;
+let p=hw.length?Math.round(hw.filter(x=>x.done).length/hw.length*100):0;pct.textContent=p+'% completed';bar.style.width=p+'%';hello.textContent='Hello, '+name+'! 👋';profileName.textContent=name;nameInput.value=name;
+hwList.innerHTML=hw.length?hw.map(x=>`<div class="item"><input type="checkbox" ${x.done?'checked':''} onchange="toggleHW(${x.id})"><div class="itemmain ${x.done?'done':''}"><b>${esc(x.t)}</b><span class="badge">${esc(x.s)}</span> <span class="muted">${x.d?'Due '+x.d:''}</span></div><button class="danger" onclick="delHW(${x.id})">Delete</button></div>`).join(''):'<div class="empty">No homework yet.</div>';
+planList.innerHTML=plans.length?plans.map(x=>`<div class="item"><div class="itemmain"><b>${esc(x.t)}</b><span class="muted">${x.d||'No date'} ${x.time||''} · ${x.m||'?'} min</span></div><button class="danger" onclick="delPlan(${x.id})">Delete</button></div>`).join(''):'<div class="empty">No study sessions yet.</div>';
+examList.innerHTML=exams.length?exams.map(x=>{let d=days(x.d);return `<div class="item"><div class="itemmain"><b>${esc(x.n)}</b><span class="muted">${x.d}</span><div class="count">${d<0?'Passed':d===0?'Today!':d+' days left'}</div></div><button class="danger" onclick="delExam(${x.id})">Delete</button></div>`}).join(''):'<div class="empty">No exams added.</div>';
+noteList.innerHTML=notes.length?notes.map(x=>`<div class="note"><b>${esc(x.t)}</b> <span class="badge">${esc(x.s)}</span><p>${esc(x.x).replace(/\n/g,'<br>')}</p><button class="danger" onclick="delNote(${x.id})">Delete</button></div>`).join(''):'<div class="empty">No notes saved.</div>';
+}
+function saveName(){name=nameInput.value.trim()||'Student';localStorage.setItem('v3name',name);render();alert('Profile saved!')}
+function clearData(){if(confirm('Clear all StudyMate data?')){localStorage.clear();location.reload()}}
+function startTimer(){if(timerInt)return;timerInt=setInterval(()=>{if(timerSec>0){timerSec--;updateClock()}else{clearInterval(timerInt);timerInt=null;alert('Focus session complete! 🎉')}} ,1000)}
+function pauseTimer(){clearInterval(timerInt);timerInt=null}
+function resetTimer(){pauseTimer();timerSec=1500;updateClock()}
+function updateClock(){clock.textContent=String(Math.floor(timerSec/60)).padStart(2,'0')+':'+String(timerSec%60).padStart(2,'0')}
+themeBtn.onclick=()=>{document.body.classList.toggle('dark');themeBtn.textContent=document.body.classList.contains('dark')?'☀️ Light mode':'🌙 Dark mode';localStorage.setItem('v3dark',document.body.classList.contains('dark'))}
+if(localStorage.getItem('v3dark')==='true'){document.body.classList.add('dark');themeBtn.textContent='☀️ Light mode'}
+today.textContent=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'});render();
+</script>
+</body>
+</html>
